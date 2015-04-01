@@ -1,6 +1,7 @@
 from urllib2 import Request, urlopen, URLError
 import json
 Days=[31,28,31,30,31,30,31,31,30,31,30,31]
+firstname = ""
 for j in range (0,11):
     i=j+1
     if i%10==i:
@@ -30,13 +31,14 @@ for j in range (0,11):
 				   pr = list(k.values())[0]
 				   for j in pr:
 				       if hasattr(j,"values") and len(list(j.values())) >=4:
-				          firstname=list(j.values())[3]
-				          file1.write(str(web_url))
-				          file1.write("    ")
-				          file1.write(str(firstname))
-				          file1.write("::")
-				          print web_url	
-				          print firstname
+				          if not(list(j.values())[3] == firstname) :
+						  firstname=list(j.values())[3]
+						  file1.write(str(web_url))
+						  file1.write("    ")
+						  file1.write(str(firstname))
+						  file1.write("::")
+						  print web_url	
+						  print firstname
 	    except URLError, e:
 		print 'Got an error code:', e
 		raw_input()
