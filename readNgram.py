@@ -3,11 +3,16 @@
 import sys
 count = 0
 
-with open("en.1grams") as f:
-	for line in f:
-		print line
-		print 'end of line'
-		count = count +1
-		if count == 100:
-			break
+wordFile = open('words_2g.txt', 'w')
 
+with open('en.2grams') as f:
+	for line in f:
+		count = count +1
+		if (count <= 5):
+			continue;
+		word = line.split('\t', 1)[0] + '\n'
+		wordFile.write(word)
+		
+		print "\rProgress  : " + str(count),
+
+print "number of lines : " + str(count)
