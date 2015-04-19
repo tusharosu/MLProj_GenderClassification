@@ -1,27 +1,9 @@
-
- iTunes Music iTunes Music@iTunesMusic
-
- Seth MacFarlane Seth MacFarlane@SethMacFarlane
-
- Legendários Legendários@Legendarios
-
- John Legend John Legend@johnlegend
-
- Little Mix Little Mix@LittleMix
-
- Marco Luque Marco Luque@marcoluque
-
- Hootsuite Hootsuite@hootsuite
-
- Ricardo Montaner Ricardo Montaner@montanertwiter
-
- Reuters Top News Reuters Top News@Reuters
-
- OMG Facts OMG Facts@OMGFacts
-
- David Luiz David Luiz@DavidLuiz_4
-
- Anderson Silva Anderson Silva@SpiderAnderson
+SethMacFarlane	M
+johnlegend	M
+marcoluque	M
+montanertwiter	M
+DavidLuiz_4	M
+SpiderAnderson	M
 
  NE-YO!! NE-YO!!@NeYoCompound
 
