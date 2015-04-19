@@ -3,9 +3,9 @@ import sys
 
 count = 0
 
-wordFile = open('words_1gm.txt', 'w')
-wordFile_mf = open('words_1gm_malef.txt', 'w')
-wordFile_ff = open('words_1gm_femf.txt', 'w')
+wordFile = open('words_1gm_dist.txt', 'w')
+wordFile_mf = open('words_1gm_malef_dist.txt', 'w')
+wordFile_ff = open('words_1gm_femf_dist.txt', 'w')
 wordFile2 = open('words_2gm.txt', 'w')
 
 sortedFreqListFem = [[]]
@@ -20,18 +20,21 @@ with open('en.1grams') as f:
         wordFile.write(word[0]+'\t')
         femaleFrequency=0
         maleFrequency=0
+        unknownFrequency=0
 
-        for i in range(1,1198,6):
+        for i in range(2,1200,6):
             femaleFrequency = femaleFrequency + int(word[i]);
-        for i in range(3,1198,6):
+        for i in range(4,1200,6):
             maleFrequency = maleFrequency + int(word[i]);
+        for i in range(6,1200,6):
+            unknownFrequency = unknownFrequency + int(word[i]);
 
         # skip words that have 0 freq count for both male and female
         if femaleFrequency > 0 or maleFrequency > 0:
             sortedFreqListFem.append([femaleFrequency, word[0]])
             sortedFreqListMale.append([maleFrequency, word[0]])
 
-        wordFile.write(str(femaleFrequency)+'\t'+str(maleFrequency) + '\n')
+        wordFile.write(str(femaleFrequency)+'\t'+str(maleFrequency) + '\t' + str(unknownFrequency) + '\n')
         print "\rProgress  : " + str(count),
 
 sortedFreqListFem.pop(0);

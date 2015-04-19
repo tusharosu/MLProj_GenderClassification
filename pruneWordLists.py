@@ -1,8 +1,12 @@
 #!/usr/bin/python
 import sys
+import string
+import unicodedata
+import unidecode
 
 skipLettersList = ['@']
 skipSubstrList = ['http','.com', '.me', '.co']
+stripCharacters = '\t\n\r\'\"?~<>.&'
 
 def checkWholeWordToSkip(word):
 	retVal = False
@@ -42,11 +46,18 @@ def pruneFile(filename, index):
 
 def groupSameWords(outFileName):
 	writeFile = open(outFileName, 'r+')
+	writeTempFile = open("tempFile", 'w')
 	wordToCountMap = {}
 	for line in writeFile:
 		wordsList = line.split('\t')
 		curWord = wordsList[1]
-		curWord = curWord.strip('\t\n\r')
+		curWord= unicode(curWord, "utf-8")
+		curWord = unidecode.unidecode(curWord)
+		curWord = curWord.strip(stripCharacters)
+		if not curWord or len(curWord) == 1:
+			if len(curWord) == 1:
+				writeTempFile.write(str(curWord) + '\n')
+			continue
 		curWord = curWord.lower()
 		if wordToCountMap.has_key(curWord):
 			wordToCountMap[curWord] += int(wordsList[0])
@@ -63,9 +74,9 @@ def groupSameWords(outFileName):
 	tempList.pop(0)
 	tempList.sort(key=lambda x: x[0], reverse=True)
 	for item in tempList:
-		writeFile.write(str(tempList[0]) + '\t' + tempList[1] + '\n')
+		writeFile.write(str(item[0]) + '\t' + item[1] + '\n')
 
-outFileNameMale = pruneFile('words_1gm_malef', 1)
+outFileNameMale = pruneFile('words_1gm_malef_dist', 1)
 groupSameWords(outFileNameMale)
-outFileNameFem = pruneFile('words_1gm_femf', 1)
+outFileNameFem = pruneFile('words_1gm_femf_dist', 1)
 groupSameWords(outFileNameFem)
