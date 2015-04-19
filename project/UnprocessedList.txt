@@ -4,94 +4,32 @@ marcoluque	M
 montanertwiter	M
 DavidLuiz_4	M
 SpiderAnderson	M
-
- NE-YO!! NE-YO!!@NeYoCompound
-
- Eugenio Derbez Eugenio Derbez@EugenioDerbez
-
- Queen Latifah Queen Latifah@IAMQUEENLATIFAH
-
- Gareth Bale Gareth Bale@GarethBale11
-
- ????? ???? ??????? ????? ???? ???????@mishari_alafasy
-
- zooey deschanel zooey deschanel@ZooeyDeschanel
-
- J. Cole J. Cole@JColeNC
-
- Carmelo Anthony Carmelo Anthony@carmeloanthony
-
- Suresh Raina Suresh Raina@ImRaina
-
- 5 Seconds of Summer 5 Seconds of Summer@5SOS
-
- Kobe Bryant Kobe Bryant@kobebryant
-
- FIFA.com FIFA.com@FIFAcom
-
- KELENDRIA ROWLAND KELENDRIA ROWLAND@KELLYROWLAND
-
- PlayStation PlayStation@PlayStation
-
- ????? ?????? ????? ??????@salman_alodah
-
- Microsoft Microsoft@Microsoft
-
- Pharrell Williams Pharrell Williams@Pharrell
-
- kata kata bijak kata kata bijak@kata2bijak
-
- T-Raww T-Raww@Tyga
-
- Abhishek Bachchan Abhishek Bachchan @juniorbachchan
-
- Abdullah Gül Abdullah Gül@cbabdullahgul
-
- Olly Murs Olly Murs@ollyofficial
-
- Ciara Ciara@ciara
-
- Victoria's Secret Victoria's Secret@VictoriasSecret
-
- Sonam Kapoor Sonam Kapoor@sonamakapoor
-
- Sarah Silverman Sarah Silverman@SarahKSilverman
-
- Recep Tayyip Erdogan Recep Tayyip Erdogan@RT_Erdogan
-
- Daniel Alves Daniel Alves@DaniAlvesD2
-
- Wall Street Journal Wall Street Journal@WSJ
-
- Jennette McCurdy Jennette McCurdy@jennettemccurdy
-
- People magazine People magazine@people
-
- Cinema XXI Cinema XXI@cinema21
-
- Rio Ferdinand Rio Ferdinand@rioferdy5
-
- tvOneNews tvOneNews@tvOneNews
-
- shireen sungkar shireen sungkar@shireensungkar
-
- fearne cotton fearne cotton@Fearnecotton
-
- The White House The White House@WhiteHouse
-
- Karan Johar Karan Johar@karanjohar
-
- bella thorne bella thorne@bellathorne
-
- Nasehat Super Nasehat Super@NasehatSuper
-
- Angel Locsin Angel Locsin@143redangel
-
- Elissa Elissa@elissakh
-
- Juan Luis Guerra Juan Luis Guerra@JuanLuisGuerra
-
- Perez Hilton Perez Hilton@PerezHilton
+ugenioDerbez	M
+IAMQUEENLATIFAH	F
+GarethBale11	M
+JColeNC	M
+carmeloanthony	M
+ImRaina	M
+kobebryant	M
+KELLYROWLAND	F
+Pharrell	M
+juniorbachchan	M
+cbabdullahgul	M
+ollyofficial	M
+ciara	F
+sonamakapoor	F
+SarahKSilverman	F
+DaniAlvesD2	M
+jennettemccurdy	F
+rioferdy5	M
+shireensungkar	F
+Fearnecotton	F
+karanjohar	M
+bellathorne	F
+143redangel	F
+elissakh	F
+JuanLuisGuerra	M
+PerezHilton
 
  Pope Francis Pope Francis@Pontifex
 
