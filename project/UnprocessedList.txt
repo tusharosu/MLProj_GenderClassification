@@ -29,41 +29,17 @@ bellathorne	F
 143redangel	F
 elissakh	F
 JuanLuisGuerra	M
-PerezHilton
-
- Pope Francis Pope Francis@Pontifex
-
- T.I. T.I. @Tip
-
- ???? ??? ?????? ???? ??? ??????@NabilAlawadhy
-
- Dwight Howard Dwight Howard@DwightHoward
-
- Steve Martin Steve Martin@SteveMartinToGo
-
- WEREVERTUMORRO WEREVERTUMORRO@werevertumorro
-
- Dulce Maria Dulce Maria@DulceMaria
-
- Vogue Magazine Vogue Magazine@voguemagazine
-
- Anderson Cooper Anderson Cooper@andersoncooper
-
- #106andPark #106andPark@106andpark
-
- CHAYANNE CHAYANNE@CHAYANNEMUSIC
-
- Tata werneck Tata werneck@Tatawerneck
-
- Raffi Ahmad Raffi Ahmad@RaffiAhmadLagi
-
- Felix Kjellberg Felix Kjellberg@pewdiepie
-
- Ricardo Arjona ® Ricardo Arjona ®@Ricardo_Arjona
-
- Shahid Kapoor Shahid Kapoor@shahidkapoor
-
- ian somerhalder ian somerhalder@iansomerhalder
+PerezHilton	M
+Pontifex	M
+DwightHoward	M
+SteveMartinToGo	M
+DulceMaria	F
+andersoncooper	M
+RaffiAhmadLagi	M
+pewdiepie	M
+Ricardo_Arjona	M
+shahidkapoor	M
+iansomerhalder	M
 
  AKON AKON@Akon
 
