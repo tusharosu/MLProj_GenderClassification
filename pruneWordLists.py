@@ -5,8 +5,11 @@ import unicodedata
 import unidecode
 
 skipLettersList = ['@']
-skipSubstrList = ['http','.com', '.me', '.co']
-stripCharacters = '\t\n\r\'\"?~<>.&'
+skipSubstrList = ['http:','.com', 'www.', '.me', '.co', '.net', '.org', '.ca', '.tv', 
+				  '.in']
+skipWordList = []
+
+stripCharacters = '\t\n\r\'\"?~<>.&_-!'
 
 def checkWholeWordToSkip(word):
 	retVal = False
