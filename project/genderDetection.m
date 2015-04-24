@@ -17,15 +17,16 @@ fid = fopen( 'fs_remainingWords_featureSet.txt', 'r' ) ;
 % end
 % fclose(fid);
 segsize = size1+1;
-FeatureSet1 = zeros(size3,(segsize));
+FS1 = zeros(size3,(segsize));
 k=1;
-while ~feof(fid)  
+while ~feof(fid)
     currData = fread(fid, segsize);
     if ~isempty(currData)
-        A=currData;
-        A=A';
-        Data = str2num(char(A(:)));
-        FeatureSet1(k,:)=Data';
+        A=currData';
+        FS1(k,:)=A;
         k=k+1;
     end
 end
+FS1=FS1 - 48;
+FeatSet1 = FS1(:,1:size1);
+Labels= FS1(:,size1+1);
