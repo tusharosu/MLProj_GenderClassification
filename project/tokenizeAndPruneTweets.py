@@ -2,7 +2,6 @@ import sys
 import string
 import unicodedata
 import unidecode
-import pruneWordLists
 from pruneWordLists import skipLettersList,skipSubstrList,stripCharacters,checkWholeWordToSkip,checkLetterToSkip,checkSubstrToSkip
 
 def pruneFile(filename):
@@ -11,7 +10,7 @@ def pruneFile(filename):
 	for line in readFile:
 		wordsList = line.split('\t')
 		curWordList=wordsList[0].split()
-		for i in range(0,len(curWordList)-1):
+		for i in range(0,len(curWordList)):
 			cmpWord =  curWordList[i].lower()
 			ignore = True
 			ignore = checkWholeWordToSkip(cmpWord)
@@ -30,6 +29,7 @@ def pruneFile(filename):
 def groupSameWords(outFileName):
 	readFile = open(outFileName, 'r')
 	writeFile = open('pruned_final.txt', 'w')
+	writeFile2 = open('pruned_final_onlywords.txt', 'w')
 	count = 0
 	for line in readFile:
 		wordToCountMap = {}
@@ -49,16 +49,31 @@ def groupSameWords(outFileName):
 				wordToCountMap[curWord] += 1
 			else:
 				wordToCountMap[curWord] = 1
-		tempList = []
+		tempList = [[]]
+		tempList2=[[]]
 		for key,value in wordToCountMap.iteritems():
 			tempList.append([key,int(value)])
-		if tempList:
-			for i in range(0,len(tempList)-1):
-				if i==len(curWordList)-1:
-					writeFile.write(str(tempList[i]))
-				else:
-					writeFile.write(str(tempList[i]) + ' ')
-			writeFile.write('\t'+ wordsList[1])
+			tempList2.append(str(key))
+		if tempList and tempList2:
+			tempList.pop(0)
+			tempList2.pop(0)
+			tempList.sort(key=lambda x: x[0], reverse=False)
+			tempList2.sort(key=lambda x: x[0], reverse=False)
+			if len(tempList) !=0:
+				for i in range(0,len(tempList)):
+					if i==len(tempList)-1:
+						writeFile.write(str(tempList[i]))
+					else:
+						writeFile.write(str(tempList[i]) + ' ')	
+				writeFile.write('\t'+ wordsList[1])
+			if len(tempList2) !=0:
+				for i in range(0,len(tempList2)):
+					if i==len(tempList)-1:
+						writeFile2.write(str(tempList2[i]))
+					else:
+						writeFile2.write(str(tempList2[i]) + ' ')
+				writeFile2.write('\t'+ wordsList[1])
+			
 
 outFileNameMale = pruneFile('myDataModified')
 groupSameWords(outFileNameMale)
