@@ -1,3 +1,6 @@
+clc;
+clear all;
+
 %!C:\Python27\pythonw.exe MergeFiles.py fs_remainingWords pruned_final_onlywords
 
 fs_remainingWords=importdata('fs_remainingWords_probablility.txt');
@@ -30,3 +33,18 @@ end
 FS1=FS1 - 48;
 FeatSet1 = FS1(:,1:size1);
 Labels= FS1(:,size1+1);
+
+n = size(FeatSet1,2);
+m = size(FeatSet1,1);
+RES = zeros(m,1);
+
+for i = 1:m
+    TEMP = FeatSet1(i,:) .* fs_remainingWords';
+    pr = 1.0;
+    for j = 1:size(TEMP,2)
+        if TEMP(1,j) > 0
+            pr = pr * TEMP(1,j);
+        end
+    end
+    RES(i,1) = pr;
+end
