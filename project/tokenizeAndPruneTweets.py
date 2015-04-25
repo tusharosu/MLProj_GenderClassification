@@ -92,7 +92,10 @@ def groupSameWords(outFileName):
 			tempList3.pop(0)
 			tempList3.sort(key=lambda x: x[0], reverse=False)
 			for temp in tempList3:
-				writeFile3.write(str(temp) + '\n')
+				key = temp[0]
+				femaleCount = temp[1][0]
+				maleCount = temp[1][1]
+				writeFile3.write(str(key) + '\t' + str(femaleCount) + '\t' + str(maleCount) + '\n')
 
 outFileNameMale = pruneFile('myDataModified')
 groupSameWords(outFileNameMale)
