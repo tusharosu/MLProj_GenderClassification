@@ -4,7 +4,7 @@ import string
 import unicodedata
 import unidecode
 
-skipLettersList = ['@']
+skipLettersList = ['@','\u']
 skipSubstrList = ['http','.com', '.me', '.co']
 stripCharacters = '\t\n\r\'\"?~<>.&'
 
