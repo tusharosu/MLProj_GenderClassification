@@ -58,6 +58,10 @@ def groupSameWords(outFileName):
 					wordToCountMap_Final[curWord][0] += 1
 			else:
 				wordToCountMap_Final[curWord] = [0,0]
+				if 'M' in wordsList[1]:
+					wordToCountMap_Final[curWord][1] = 1
+				else:
+					wordToCountMap_Final[curWord][0] = 1
 
 		tempList = [[]]
 		tempList2=[[]]
@@ -86,7 +90,7 @@ def groupSameWords(outFileName):
 				writeFile2.write('\t'+ wordsList[1])
 
 	for key,[value1,value2] in wordToCountMap_Final.iteritems():
-		tempList3.append([key,[int(value),int(value2)]])
+		tempList3.append([key,[int(value1),int(value2)]])
 
 	if tempList3 and len(tempList3) !=0:
 			tempList3.pop(0)
