@@ -28,9 +28,9 @@ def pruneFile(filename):
 
 def groupSameWords(outFileName):
 	readFile = open(outFileName, 'r')
-	writeFile = open('pruned_final.txt', 'w')
-	writeFile2 = open('pruned_final_onlywords.txt', 'w')
-	writeFile3 = open('wordMap.txt','w')
+	# writeFile = open('Datasets\pruned_final.txt', 'w')
+	writeFile2 = open('Datasets\\final_pruned_tweets.txt', 'w')
+	writeFile3 = open('Datasets\wordMap.txt','w')
 	wordToCountMap_Final={}
 	count = 0
 	for line in readFile:
@@ -74,13 +74,13 @@ def groupSameWords(outFileName):
 			tempList2.pop(0)
 			tempList.sort(key=lambda x: x[0], reverse=False)
 			tempList2.sort(key=lambda x: x[0], reverse=False)
-			if len(tempList) !=0:
-				for i in range(0,len(tempList)):
-					if i==len(tempList)-1:
-						writeFile.write(str(tempList[i]))
-					else:
-						writeFile.write(str(tempList[i]) + ' ')	
-				writeFile.write('\t'+ wordsList[1])
+			# if len(tempList) !=0:
+			# 	for i in range(0,len(tempList)):
+			# 		if i==len(tempList)-1:
+			# 			# writeFile.write(str(tempList[i]))
+			# 		else:
+			# 			# writeFile.write(str(tempList[i]) + ' ')	
+			# 	# writeFile.write('\t'+ wordsList[1])
 			if len(tempList2) !=0:
 				for i in range(0,len(tempList2)):
 					if i==len(tempList)-1:
@@ -101,5 +101,5 @@ def groupSameWords(outFileName):
 				maleCount = temp[1][1]
 				writeFile3.write(str(key) + '\t' + str(femaleCount) + '\t' + str(maleCount) + '\n')
 
-outFileNameMale = pruneFile('myDataModified')
+outFileNameMale = pruneFile('Datasets\\tweets_without_RT')
 groupSameWords(outFileNameMale)
