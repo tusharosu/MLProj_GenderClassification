@@ -4,7 +4,7 @@ import string
 import unicodedata
 import unidecode
 
-skipLettersList = ['@']
+skipLettersList = ['@','\u']
 skipSubstrList = ['http:','.com', 'www.', '.me', '.co', '.net', '.org', '.ca', '.tv', 
 				  '.in']
 skipWordList = []
@@ -79,7 +79,11 @@ def groupSameWords(outFileName):
 	for item in tempList:
 		writeFile.write(str(item[0]) + '\t' + item[1] + '\n')
 
-outFileNameMale = pruneFile('words_1gm_malef_dist', 1)
-groupSameWords(outFileNameMale)
-outFileNameFem = pruneFile('words_1gm_femf_dist', 1)
-groupSameWords(outFileNameFem)
+def main():
+	outFileNameMale = pruneFile('words_1gm_malef_dist', 1)
+	groupSameWords(outFileNameMale)
+	outFileNameFem = pruneFile('words_1gm_femf_dist', 1)
+	groupSameWords(outFileNameFem)
+
+if __name__ == '__main__':
+	main()
