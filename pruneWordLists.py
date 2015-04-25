@@ -4,7 +4,7 @@ import string
 import unicodedata
 import unidecode
 
-skipLettersList = ['@']
+skipLettersList = ['@','\u']
 skipSubstrList = ['http','.com', '.me', '.co']
 stripCharacters = '\t\n\r\'\"?~<>.&'
 
@@ -45,10 +45,11 @@ def pruneFile(filename, index):
 	return filename+'_pruned.txt'
 
 def groupSameWords(outFileName):
-	writeFile = open(outFileName, 'r+')
+	readFile = open(outFileName+'.txt', 'r')
+	writeFile = open(outFileName+'_final.txt', 'w')
 	writeTempFile = open("tempFile", 'w')
 	wordToCountMap = {}
-	for line in writeFile:
+	for line in readFile:
 		wordsList = line.split('\t')
 		curWord = wordsList[1]
 		curWord= unicode(curWord, "utf-8")
@@ -76,7 +77,11 @@ def groupSameWords(outFileName):
 	for item in tempList:
 		writeFile.write(str(item[0]) + '\t' + item[1] + '\n')
 
-outFileNameMale = pruneFile('words_1gm_malef_dist', 1)
-groupSameWords(outFileNameMale)
-outFileNameFem = pruneFile('words_1gm_femf_dist', 1)
-groupSameWords(outFileNameFem)
+# def main():
+	outFileNameMale = pruneFile('words_1gm_malef_dist', 1)
+	groupSameWords(outFileNameMale)
+	outFileNameFem = pruneFile('words_1gm_femf_dist', 1)
+	groupSameWords(outFileNameFem)
+
+# if __name__ == '__main__':
+# 	main()
