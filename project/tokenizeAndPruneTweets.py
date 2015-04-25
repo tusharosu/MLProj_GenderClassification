@@ -30,6 +30,8 @@ def groupSameWords(outFileName):
 	readFile = open(outFileName, 'r')
 	writeFile = open('pruned_final.txt', 'w')
 	writeFile2 = open('pruned_final_onlywords.txt', 'w')
+	writeFile3 = open('wordMap.txt','w')
+	wordToCountMap_Final={}
 	count = 0
 	for line in readFile:
 		wordToCountMap = {}
@@ -49,8 +51,17 @@ def groupSameWords(outFileName):
 				wordToCountMap[curWord] += 1
 			else:
 				wordToCountMap[curWord] = 1
+			if wordToCountMap_Final.has_key(curWord):
+				if 'M' in wordsList[1]:
+					wordToCountMap_Final[curWord][1] += 1
+				else:
+					wordToCountMap_Final[curWord][0] += 1
+			else:
+				wordToCountMap_Final[curWord] = [0,0]
+
 		tempList = [[]]
 		tempList2=[[]]
+		tempList3=[[]]
 		for key,value in wordToCountMap.iteritems():
 			tempList.append([key,int(value)])
 			tempList2.append(str(key))
@@ -73,7 +84,15 @@ def groupSameWords(outFileName):
 					else:
 						writeFile2.write(str(tempList2[i]) + ' ')
 				writeFile2.write('\t'+ wordsList[1])
-			
+
+	for key,[value1,value2] in wordToCountMap_Final.iteritems():
+		tempList3.append([key,[int(value),int(value2)]])
+
+	if tempList3 and len(tempList3) !=0:
+			tempList3.pop(0)
+			tempList3.sort(key=lambda x: x[0], reverse=False)
+			for temp in tempList3:
+				writeFile3.write(str(temp) + '\n')
 
 outFileNameMale = pruneFile('myDataModified')
 groupSameWords(outFileNameMale)
