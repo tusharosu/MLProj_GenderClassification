@@ -5,8 +5,11 @@ import unicodedata
 import unidecode
 
 skipLettersList = ['@','\u']
-skipSubstrList = ['http','.com', '.me', '.co']
-stripCharacters = '\t\n\r\'\"?~<>.&'
+skipSubstrList = ['http:','.com', 'www.', '.me', '.co', '.net', '.org', '.ca', '.tv', 
+				  '.in']
+skipWordList = []
+
+stripCharacters = '\t\n\r\'\"?~<>.&_-!'
 
 def checkWholeWordToSkip(word):
 	retVal = False
@@ -45,11 +48,10 @@ def pruneFile(filename, index):
 	return filename+'_pruned.txt'
 
 def groupSameWords(outFileName):
-	readFile = open(outFileName+'.txt', 'r')
-	writeFile = open(outFileName+'_final.txt', 'w')
+	writeFile = open(outFileName, 'r+')
 	writeTempFile = open("tempFile", 'w')
 	wordToCountMap = {}
-	for line in readFile:
+	for line in writeFile:
 		wordsList = line.split('\t')
 		curWord = wordsList[1]
 		curWord= unicode(curWord, "utf-8")
@@ -77,11 +79,11 @@ def groupSameWords(outFileName):
 	for item in tempList:
 		writeFile.write(str(item[0]) + '\t' + item[1] + '\n')
 
-# def main():
+def main():
 	outFileNameMale = pruneFile('words_1gm_malef_dist', 1)
 	groupSameWords(outFileNameMale)
 	outFileNameFem = pruneFile('words_1gm_femf_dist', 1)
 	groupSameWords(outFileNameFem)
 
-# if __name__ == '__main__':
-# 	main()
+if __name__ == '__main__':
+	main()
