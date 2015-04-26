@@ -1,9 +1,6 @@
-clc;
-clear all;
-
+function accuracy = genderDetectionUsingNaiveBayes(trainingSet,probabilitiesSet)
+accuracy=0;
 %constants
-trainingSet = 'Trainingtweets_without_RT_final_prune';
-probabilitiesSet = 'fs_remainingWords_1gm_trng';
 featureSetsFile = strcat(probabilitiesSet,'_featureSet.txt');
 trainingSetFile = strcat(trainingSet,'.txt');
 probabilitiesSetFile = strcat(probabilitiesSet,'.txt');
@@ -15,6 +12,7 @@ systemCommand = strcat('C:\Python27\pythonw.exe',{' '},'MergeFiles.py',{' '},pro
 %Training
 Tweets_pruned = importdata(trainingSetFile);
 mfprob = importdata(probabilitiesSetFile);
+if ~isempty(mfprob)
 probability_words = mfprob.data(:,3);
 [numberOfFeatures,~]=size(probability_words);
 [sizeOfTrainingSet,~]=size(Tweets_pruned);
@@ -85,3 +83,4 @@ for j=1:sizeOfTrainingSet
     end
 end
 accuracy = countMatch/sizeOfTrainingSet
+end
