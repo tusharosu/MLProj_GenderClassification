@@ -41,6 +41,8 @@ def groupSameWords(outFileName,filename):
 			wordsList = line.split(' \t')
 		curWordList=wordsList[0].split()
 		for i in range(0,len(curWordList)-1):
+			tmpWrdLst1=[]
+			tmpWrdLst2=[]
 			curWord =  curWordList[i].lower()
 			curWord= unicode(curWord, "utf-8")
 			curWord = unidecode.unidecode(curWord)
@@ -48,21 +50,43 @@ def groupSameWords(outFileName,filename):
 			if not curWord or len(curWord) == 1:
 				continue
 			curWord = curWord.lower()
-			if wordToCountMap.has_key(curWord):
-				wordToCountMap[curWord] += 1
+			if not '.' in curWord and not '\\n' in curWord:
+				tmpWrdLst1.append(curWord)
 			else:
-				wordToCountMap[curWord] = 1
-			if wordToCountMap_Final.has_key(curWord):
-				if 'M' in wordsList[1]:
-					wordToCountMap_Final[curWord][1] += 1
+				if '.' in curWord:
+					dotWordList = curWord.split('.')
+					word1 = dotWordList[0]
+					word2 = dotWordList[len(dotWordList)-1]
+					tmpWrdLst1.append(word1)
+					tmpWrdLst1.append(word2)
+			for word3 in tmpWrdLst1:
+					if '\\n' in word3:
+						nWordList = curWord.split('\\n')
+						word1 = nWordList[0]
+						word2 = nWordList[len(nWordList)-1]
+						tmpWrdLst2.append(word1)
+						tmpWrdLst2.append(word2)
+					else:
+						tmpWrdLst2.append(word3)
+
+
+			for word in tmpWrdLst2:
+				word=word.strip(stripCharacters)
+				if wordToCountMap.has_key(word):
+					wordToCountMap[word] += 1
 				else:
-					wordToCountMap_Final[curWord][0] += 1
-			else:
-				wordToCountMap_Final[curWord] = [0,0]
-				if 'M' in wordsList[1]:
-					wordToCountMap_Final[curWord][1] = 1
+					wordToCountMap[word] = 1
+				if wordToCountMap_Final.has_key(word):
+					if 'M' in wordsList[1]:
+						wordToCountMap_Final[word][1] += 1
+					else:
+						wordToCountMap_Final[word][0] += 1
 				else:
-					wordToCountMap_Final[curWord][0] = 1
+					wordToCountMap_Final[word] = [0,0]
+					if 'M' in wordsList[1]:
+						wordToCountMap_Final[word][1] = 1
+					else:
+						wordToCountMap_Final[word][0] = 1
 
 		# tempList = [[]]
 		tempList2=[[]]
@@ -90,19 +114,27 @@ def groupSameWords(outFileName,filename):
 						writeFile2.write(str(tempList2[i]) + ' ')
 				writeFile2.write('\t'+ wordsList[1])
 	if 'Trainingtweets' in filename:
-		writeFile3 = open('Datasets\\1gm_trng_tweets.txt','w')
+		writeFile3 = open('Datasets\\1gm_trng_male_pruned_dist.txt','w')
+		writeFile4 = open('Datasets\\1gm_trng_female_pruned_dist.txt','w')
 		tempList3=[[]]
+		tempList4=[[]]
 		for key,[value1,value2] in wordToCountMap_Final.iteritems():
-			tempList3.append([key,[int(value1),int(value2)]])
+			tempList3.append([int(value2),key])
+			tempList4.append([int(value1),key])		
 	
-		if tempList3 and len(tempList3)!=0:
+		if tempList3 and len(tempList3)!=0 and tempList4 and len(tempList4)!=0:
 				tempList3.pop(0)
-				tempList3.sort(key=lambda x: x[0], reverse=False)
+				tempList3.sort(key=lambda x: x[0], reverse=True)
+				tempList4.pop(0)
+				tempList4.sort(key=lambda x: x[0], reverse=True)
 				for temp in tempList3:
-					key = temp[0]
-					femaleCount = temp[1][0]
-					maleCount = temp[1][1]
-					writeFile3.write(str(key) + '\t' + str(femaleCount) + '\t' + str(maleCount) + '\n')
+					key = temp[1]
+					MaleCount = temp[0]
+					writeFile3.write(str(MaleCount) + '\t' + str(key)+'\n')
+				for temp in tempList4:
+					key = temp[1]
+					FemaleCount = temp[0]
+					writeFile4.write(str(FemaleCount) + '\t' + str(key)+'\n')
 
 to_be_pruned_List = ['Datasets\\Trainingtweets_without_RT','Datasets\\Testingtweets_without_RT']
 for filename in to_be_pruned_List:

@@ -9,7 +9,7 @@ skipSubstrList = ['http:','.com', 'www.', '.me', '.co', '.net', '.org', '.ca', '
 				  '.in']
 skipWordList = []
 
-stripCharacters = '\t\n\r\'\"?~<>.&_-!'
+stripCharacters = '\\t\\n\\r\'\"?~<>.&_-!,\\:'
 
 def checkWholeWordToSkip(word):
 	retVal = False
@@ -57,15 +57,36 @@ def groupSameWords(outFileName):
 		curWord= unicode(curWord, "utf-8")
 		curWord = unidecode.unidecode(curWord)
 		curWord = curWord.strip(stripCharacters)
-		if not curWord or len(curWord) == 1:
-			if len(curWord) == 1:
-				writeTempFile.write(str(curWord) + '\n')
-			continue
-		curWord = curWord.lower()
-		if wordToCountMap.has_key(curWord):
-			wordToCountMap[curWord] += int(wordsList[0])
+		if not '.' in curWord and not '\\n' in curWord:
+				tmpWrdLst1.append(curWord)
 		else:
-			wordToCountMap[curWord] = int(wordsList[0])
+				if '.' in curWord:
+					dotWordList = curWord.split('.')
+					word1 = dotWordList[0]
+					word2 = dotWordList[len(dotWordList)-1]
+					tmpWrdLst1.append(word1)
+					tmpWrdLst1.append(word2)
+		
+		for word3 in tmpWrdLst1:
+				if '\\n' in word3:
+						nWordList = curWord.split('\\n')
+						word1 = nWordList[0]
+						word2 = nWordList[len(nWordList)-1]
+						tmpWrdLst2.append(word1)
+						tmpWrdLst2.append(word2)
+				else:
+						tmpWrdLst2.append(word3)
+		for word in tmpWrdLst2:
+			word=word.strip(stripCharacters)
+			if not word or len(word) == 1:
+				if len(word) == 1:
+					writeTempFile.write(str(word) + '\n')
+				continue
+			word = word.lower()
+			if wordToCountMap.has_key(word):
+				wordToCountMap[word] += int(wordsList[0])
+			else:
+				wordToCountMap[word] = int(wordsList[0])
 
 	writeFile.truncate()
 	writeFile.close()
