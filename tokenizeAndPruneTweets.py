@@ -2,7 +2,10 @@ import sys
 import string
 import unicodedata
 import unidecode
-from pruneWordLists import skipLettersList,skipSubstrList,stripCharacters,checkWholeWordToSkip,checkLetterToSkip,checkSubstrToSkip
+from pruneWordLists import skipLettersList,skipSubstrList, \
+stripSubstringList,stripCharacters, \
+checkWholeWordToSkip,checkLetterToSkip,checkSubstrToSkip, \
+stripChars
 
 def pruneFile(filename):
 	readFile = open(filename+'.txt', 'r')
@@ -46,32 +49,28 @@ def groupSameWords(outFileName,filename):
 			curWord =  curWordList[i].lower()
 			curWord= unicode(curWord, "utf-8")
 			curWord = unidecode.unidecode(curWord)
-			curWord = curWord.strip(stripCharacters)
+
+			curWord = stripChars(curWord)
+
 			if not curWord or len(curWord) == 1:
 				continue
 			curWord = curWord.lower()
-			if not '.' in curWord and not '\\n' in curWord:
+			if not '.' in curWord and not '\n' in curWord:
 				tmpWrdLst1.append(curWord)
 			else:
-				if '.' in curWord:
-					dotWordList = curWord.split('.')
-					word1 = dotWordList[0]
-					word2 = dotWordList[len(dotWordList)-1]
-					tmpWrdLst1.append(word1)
-					tmpWrdLst1.append(word2)
-			for word3 in tmpWrdLst1:
-					if '\\n' in word3:
-						nWordList = curWord.split('\\n')
-						word1 = nWordList[0]
-						word2 = nWordList[len(nWordList)-1]
-						tmpWrdLst2.append(word1)
-						tmpWrdLst2.append(word2)
-					else:
-						tmpWrdLst2.append(word3)
+				dotWordList = curWord.split('.')
+				wordListMayHaveNL = [""]
+				for item in dotWordList:
+					if len(item) > 0:
+						nlWordList = item.split('\n')
+						for item2 in nlWordList:
+							if len(item2) >0:
+								print item2
+								item2 = stripChars(item2)
+								print item2
+								tmpWrdLst1.append(stripChars(item2))
 
-
-			for word in tmpWrdLst2:
-				word=word.strip(stripCharacters)
+			for word in tmpWrdLst1:
 				if wordToCountMap.has_key(word):
 					wordToCountMap[word] += 1
 				else:

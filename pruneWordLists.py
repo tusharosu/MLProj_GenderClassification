@@ -9,7 +9,17 @@ skipSubstrList = ['http:','.com', 'www.', '.me', '.co', '.net', '.org', '.ca', '
 				  '.in']
 skipWordList = []
 
-stripCharacters = '\\t\\n\\r\'\"?~<>.&_-!,\\:'
+stripCharacters = '\t\n\r\'\"?~<>.&_-!\\:,'
+stripSubstringList = ['\\t','\\n','\\r']
+
+def stripChars(word):
+	for item in stripSubstringList:
+		if word.startswith(item):						
+			word = word[len(item):]
+		if word.endswith(item):						
+			word = word[:-len(item)]
+	word = word.strip(stripCharacters)
+	return word
 
 def checkWholeWordToSkip(word):
 	retVal = False
@@ -56,28 +66,30 @@ def groupSameWords(outFileName):
 		curWord = wordsList[1]
 		curWord= unicode(curWord, "utf-8")
 		curWord = unidecode.unidecode(curWord)
+		for item in stripSubstringList:
+				if curWord.startswith(item):
+					curWord = words[len(item):]
+				if curWord.endswith(item):
+					curWord = words[:-len(item)]
+
 		curWord = curWord.strip(stripCharacters)
-		if not '.' in curWord and not '\\n' in curWord:
-				tmpWrdLst1.append(curWord)
-		else:
-				if '.' in curWord:
-					dotWordList = curWord.split('.')
-					word1 = dotWordList[0]
-					word2 = dotWordList[len(dotWordList)-1]
-					tmpWrdLst1.append(word1)
-					tmpWrdLst1.append(word2)
 		
-		for word3 in tmpWrdLst1:
-				if '\\n' in word3:
-						nWordList = curWord.split('\\n')
-						word1 = nWordList[0]
-						word2 = nWordList[len(nWordList)-1]
-						tmpWrdLst2.append(word1)
-						tmpWrdLst2.append(word2)
-				else:
-						tmpWrdLst2.append(word3)
-		for word in tmpWrdLst2:
-			word=word.strip(stripCharacters)
+		if not '.' in curWord and not '\n' in curWord:
+				tmpWrdLst1.append(curWord)
+			else:
+				dotWordList = curWord.split('.')
+				wordListMayHaveNL = [""]
+				for item in dotWordList:
+					if len(item) > 0:
+						nlWordList = item.split('\n')
+						for item2 in nlWordList:
+							if len(item2) >0:
+								print item2
+								item2 = stripChars(item2)
+								print item2
+								tmpWrdLst1.append(stripChars(item2))
+
+		for word in tmpWrdLst1:
 			if not word or len(word) == 1:
 				if len(word) == 1:
 					writeTempFile.write(str(word) + '\n')
