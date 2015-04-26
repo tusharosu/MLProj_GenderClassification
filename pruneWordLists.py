@@ -76,7 +76,7 @@ def groupSameWords(outFileName):
 		
 		if not '.' in curWord and not '\n' in curWord:
 				tmpWrdLst1.append(curWord)
-		else:
+			else:
 				dotWordList = curWord.split('.')
 				wordListMayHaveNL = [""]
 				for item in dotWordList:
