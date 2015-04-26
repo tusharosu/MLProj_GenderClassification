@@ -3,6 +3,7 @@ import sys
 import string
 import unicodedata
 import unidecode
+import re
 
 skipLettersList = ['@','\u']
 skipSubstrList = ['http:','.com', 'www.', '.me', '.co', '.net', '.org', '.ca', '.tv', 
@@ -13,13 +14,29 @@ stripCharacters = '\t\n\r\'\"?~<>.&_-!\\:,'
 stripSubstringList = ['\\t','\\n','\\r']
 
 def stripChars(word):
+	modWord = word
+
 	for item in stripSubstringList:
-		if word.startswith(item):						
-			word = word[len(item):]
-		if word.endswith(item):						
-			word = word[:-len(item)]
-	word = word.strip(stripCharacters)
-	return word
+		while modWord.startswith(item):						
+			modWord = modWord[len(item):]
+		while modWord.endswith(item):						
+			modWord = modWord[:-len(item)]
+	modWord = modWord.strip(stripCharacters)
+	if(word != modWord):
+		stripChars(modWord)
+	return modWord
+
+def splitWord(word):
+	wordListAfterSplit = re.split('\.|\n',word)
+	retList = [""]
+	print '-------------------------' + word
+	for item in wordListAfterSplit:
+		if len(item) > 0:
+			retList.append(item)
+	retList.pop(0)
+	print retList
+	return retList
+
 
 def checkWholeWordToSkip(word):
 	retVal = False
@@ -76,18 +93,18 @@ def groupSameWords(outFileName):
 		
 		if not '.' in curWord and not '\n' in curWord:
 				tmpWrdLst1.append(curWord)
-			else:
-				dotWordList = curWord.split('.')
-				wordListMayHaveNL = [""]
-				for item in dotWordList:
-					if len(item) > 0:
-						nlWordList = item.split('\n')
-						for item2 in nlWordList:
-							if len(item2) >0:
-								print item2
-								item2 = stripChars(item2)
-								print item2
-								tmpWrdLst1.append(stripChars(item2))
+		else:
+			dotWordList = curWord.split('.')
+			wordListMayHaveNL = [""]
+			for item in dotWordList:
+				if len(item) > 0:
+					nlWordList = item.split('\n')
+					for item2 in nlWordList:
+						if len(item2) >0:
+							print item2
+							item2 = stripChars(item2)
+							print item2
+							tmpWrdLst1.append(stripChars(item2))
 
 		for word in tmpWrdLst1:
 			if not word or len(word) == 1:
