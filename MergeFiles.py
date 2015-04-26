@@ -55,8 +55,8 @@ def CreateDataSet(featureFileList,filename2):
 
 featureFileList=[]
 for i in range(1,len(sys.argv)-1):
-	featureFileList.append(sys.argv[i])
-filename2 = sys.argv[len(sys.argv)-1]
+	featureFileList.append('Datasets\\'+sys.argv[i])
+filename2 = 'Datasets\\'+sys.argv[len(sys.argv)-1]
 
 CreateDataSet(featureFileList,filename2)
 
