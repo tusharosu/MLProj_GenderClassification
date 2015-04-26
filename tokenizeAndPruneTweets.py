@@ -58,22 +58,9 @@ def groupSameWords(outFileName,filename):
 			wordsAfterSplitList = splitWord(curWord)
 			for item in wordsAfterSplitList:
 				tmpWrdLst1.append(item)
-			# if not '.' in curWord and not '\\n' in curWord:
-			# 	tmpWrdLst1.append(curWord)
-			# else:
-			# 	print '-----------' + curWord
-			# 	dotWordList = curWord.split('.')
-			# 	for item in dotWordList:
-			# 		if len(item) > 0:
-			# 			nlWordList = item.split('\\n')
-			# 			for item2 in nlWordList:
-			# 				if len(item2) >0:
-			# 					print item2
-			# 					item2 = stripChars(item2)
-			# 					print item2
-			# 					tmpWrdLst1.append(stripChars(item2))
 
-			tmpWrdLst1 = list(set(tmpWrdLst1))
+			# Enable this to get distinct word counts
+			# tmpWrdLst1 = list(set(tmpWrdLst1))
 			for word in tmpWrdLst1:
 				if wordToCountMap.has_key(word):
 					wordToCountMap[word] += 1

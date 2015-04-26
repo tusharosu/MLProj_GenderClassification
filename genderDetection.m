@@ -4,7 +4,8 @@ clear all;
 fs_remainingWords_1gm_trng=importdata('fs_remainingWords_1gm_trng_probablility.txt');
 Testingtweets_pruned = importdata('Testingtweets_without_RT_final_prune.txt');
 probability_words = importdata('fs_remainingWords_1gm_trng.txt');
-probability_words = probability_words.data(:,2);
+mfprob = importdata('fs_remainingWords_1gm_trng.txt');
+probability_words = probability_words.data(:,3);
 
 [size1,size2]=size(fs_remainingWords_1gm_trng);
 [size3,size4]=size(Testingtweets_pruned);
@@ -28,11 +29,23 @@ n = size(featureSet_1,2);
 m = size(featureSet_1,1);
 RES = zeros(m,n);
 RES_M=zeros(m,n);
-fs_remainingWords_1gm_trng_ma=ones(n,1)-fs_remainingWords_1gm_trng;
+
+
+fem_prob = mfprob.data(:,1);
+male_prob = mfprob.data(:,2);
+
 for i = 1:m
-    RES(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng';
-    RES_M(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng_ma';
+    RES(i,:) = featureSet_1(i,:) .* fem_prob';
+    %RES(i,:) = (1-featureSet_1(i,:)) .* (1-fem_prob');
+    RES_M(i,:) = featureSet_1(i,:) .* male_prob';
+    %RES_M(i,:) = (1-featureSet_1(i,:)) .* (1-male_prob)';
 end
+
+% fs_remainingWords_1gm_trng_ma=ones(n,1)-fs_remainingWords_1gm_trng;
+% for i = 1:m
+%     RES(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng';
+%     RES_M(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng_ma';
+% end
 countFem=0;
 for i=1:m
     if(Labels(i,1)==2)
@@ -49,7 +62,7 @@ for i = 1:m
             p_female = p_female*RES(i,j);
         end
         if(RES_M(i,j)>0)
-            p_male = p_male*RES(i,j);
+            p_male = p_male*RES_M(i,j);
         end
     end
     prob_male(i,1)=p_male;
