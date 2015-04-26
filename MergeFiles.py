@@ -22,7 +22,6 @@ def CreateDataSet(featureFileList,filename2):
 			featureSet = line.split('\t')
 			word=featureSet[0]
 			prob=featureSet[1]
-			print prob
 			wordList.append(word)
 			wordMap[word] = c
 			c=c+1

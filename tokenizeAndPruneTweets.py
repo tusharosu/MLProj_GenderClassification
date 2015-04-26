@@ -73,6 +73,7 @@ def groupSameWords(outFileName,filename):
 			# 					print item2
 			# 					tmpWrdLst1.append(stripChars(item2))
 
+			tmpWrdLst1 = list(set(tmpWrdLst1))
 			for word in tmpWrdLst1:
 				if wordToCountMap.has_key(word):
 					wordToCountMap[word] += 1

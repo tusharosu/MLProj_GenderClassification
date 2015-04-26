@@ -33,9 +33,31 @@ for i = 1:m
     RES(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng';
     RES_M(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng_ma';
 end
+countFem=0;
+for i=1:m
+    if(Labels(i,1)==2)
+        countFem=countFem+1;
+    end
+end
+Fem_prob=countFem/m;
+Male_prob=1-Fem_prob;
+for i = 1:m
+    p_male=1;
+    p_female=1;
+    for j=1:n
+        if(RES(i,j)>0)
+            p_female = p_female*RES(i,j);
+        end
+        if(RES_M(i,j)>0)
+            p_male = p_male*RES(i,j);
+        end
+    end
+    prob_male(i,1)=p_male;
+    prob_female(i,1)=p_female;
+end
 
-prob_test_fm = RES*probability_words;
-prob_test_m = RES_M*probability_words;
+prob_test_m = prob_male*Male_prob;
+prob_test_fm=prob_female*Fem_prob;
 label_test=ones(m,1);
 for i=1:m
     if prob_test_fm(i,1)>=prob_test_m(i,1)
