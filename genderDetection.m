@@ -1,17 +1,26 @@
 clc;
 clear all;
-!C:\Python27\pythonw.exe MergeFiles.py fs_remainingWords_1gm_trng Trainingtweets_without_RT_final_prune
-fs_remainingWords_1gm_trng=importdata('fs_remainingWords_1gm_trng_probablility.txt');
-Testingtweets_pruned = importdata('Testingtweets_without_RT_final_prune.txt');
-probability_words = importdata('fs_remainingWords_1gm_trng.txt');
-mfprob = importdata('fs_remainingWords_1gm_trng.txt');
-probability_words = probability_words.data(:,3);
 
-[size1,size2]=size(fs_remainingWords_1gm_trng);
-[size3,size4]=size(Testingtweets_pruned);
-fid = fopen( 'fs_remainingWords_1gm_trng_featureSet.txt', 'r' ) ;
-segsize = size1+1;
-featureSet_temp = zeros(size3,(segsize));
+%constants
+trainingSet = 'Trainingtweets_without_RT_final_prune';
+probabilitiesSet = 'fs_remainingWords_1gm_trng';
+featureSetsFile = strcat(probabilitiesSet,'_featureSet.txt');
+trainingSetFile = strcat(trainingSet,'.txt');
+probabilitiesSetFile = strcat(probabilitiesSet,'.txt');
+systemCommand = strcat('C:\Python27\pythonw.exe',{' '},'MergeFiles.py',{' '},probabilitiesSet,{' '},trainingSet);
+
+%python script to be executed
+[status] = system(systemCommand{:});
+
+%Training
+Tweets_pruned = importdata(trainingSetFile);
+mfprob = importdata(probabilitiesSetFile);
+probability_words = mfprob.data(:,3);
+[numberOfFeatures,~]=size(probability_words);
+[sizeOfTrainingSet,~]=size(Tweets_pruned);
+fid = fopen( featureSetsFile, 'r' ) ;
+segsize = numberOfFeatures+1;
+featureSet_temp = zeros(sizeOfTrainingSet,(segsize));
 k=1;
 while ~feof(fid)
     currData = fread(fid, segsize);
@@ -22,65 +31,57 @@ while ~feof(fid)
     end
 end
 featureSet_temp=featureSet_temp - 48;
-featureSet_1 = featureSet_temp(:,1:size1);
-Labels= featureSet_temp(:,size1+1);
+featureSet = featureSet_temp(:,1:numberOfFeatures);
+labels_train= featureSet_temp(:,numberOfFeatures+1);
 
-n = size(featureSet_1,2);
-m = size(featureSet_1,1);
-RES = zeros(m,n);
-RES_M=zeros(m,n);
-
+prob_word_for_female = zeros(sizeOfTrainingSet,numberOfFeatures);
+prob_word_for_male=zeros(sizeOfTrainingSet,numberOfFeatures);
 
 fem_prob = mfprob.data(:,1);
 male_prob = mfprob.data(:,2);
 
-for i = 1:m
-    RES(i,:) = featureSet_1(i,:) .* fem_prob';
-    %RES(i,:) = (1-featureSet_1(i,:)) .* (1-fem_prob');
-    RES_M(i,:) = featureSet_1(i,:) .* male_prob';
-    %RES_M(i,:) = (1-featureSet_1(i,:)) .* (1-male_prob)';
+for i = 1:sizeOfTrainingSet
+    prob_word_for_female(i,:) = featureSet(i,:) .* fem_prob';
+    prob_word_for_male(i,:) = featureSet(i,:) .* male_prob';
 end
 
-% fs_remainingWords_1gm_trng_ma=ones(n,1)-fs_remainingWords_1gm_trng;
-% for i = 1:m
-%     RES(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng';
-%     RES_M(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng_ma';
-% end
 countFem=0;
-for i=1:m
-    if(Labels(i,1)==2)
+for i=1:sizeOfTrainingSet
+    if(labels_train(i,1)==2)
         countFem=countFem+1;
     end
 end
-Fem_prob=countFem/m;
-Male_prob=1-Fem_prob;
-for i = 1:m
+femaleProbability=countFem/sizeOfTrainingSet;
+maleProbability=1-femaleProbability;
+for i = 1:sizeOfTrainingSet
     p_male=1;
     p_female=1;
-    for j=1:n
-        if(RES(i,j)>0)
-            p_female = p_female*RES(i,j);
+    for j=1:numberOfFeatures
+        if(prob_word_for_female(i,j)>0)
+            p_female = p_female*prob_word_for_female(i,j);
         end
-        if(RES_M(i,j)>0)
-            p_male = p_male*RES_M(i,j);
+        if(prob_word_for_male(i,j)>0)
+            p_male = p_male*prob_word_for_male(i,j);
         end
     end
     prob_male(i,1)=p_male;
     prob_female(i,1)=p_female;
 end
 
-prob_test_m = prob_male*Male_prob;
-prob_test_fm=prob_female*Fem_prob;
-label_test=ones(m,1);
-for i=1:m
+prob_test_m = prob_male*maleProbability;
+prob_test_fm=prob_female*femaleProbability;
+labels_test=ones(sizeOfTrainingSet,1);
+
+for i=1:sizeOfTrainingSet
     if prob_test_fm(i,1)>=prob_test_m(i,1)
-        label_test(i,1)=2;
+        labels_test(i,1)=2;
     end
 end
 countMatch=0;
-for j=1:m
-    if label_test(j,1) == Labels(j,1)
+
+for j=1:sizeOfTrainingSet
+    if labels_test(j,1) == labels_train(j,1)
         countMatch=countMatch+1;
     end
 end
-accuracy = countMatch/m
+accuracy = countMatch/sizeOfTrainingSet
