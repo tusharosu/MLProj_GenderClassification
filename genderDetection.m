@@ -1,10 +1,11 @@
 clc;
 clear all;
-%!C:\Python27\pythonw.exe MergeFiles.py fs_remainingWords_1gm_trng Testingtweets_without_RT_final_prune
+!C:\Python27\pythonw.exe MergeFiles.py fs_remainingWords_1gm_trng Trainingtweets_without_RT_final_prune
 fs_remainingWords_1gm_trng=importdata('fs_remainingWords_1gm_trng_probablility.txt');
 Testingtweets_pruned = importdata('Testingtweets_without_RT_final_prune.txt');
 probability_words = importdata('fs_remainingWords_1gm_trng.txt');
 probability_words = probability_words.data(:,2);
+
 [size1,size2]=size(fs_remainingWords_1gm_trng);
 [size3,size4]=size(Testingtweets_pruned);
 fid = fopen( 'fs_remainingWords_1gm_trng_featureSet.txt', 'r' ) ;
@@ -26,21 +27,24 @@ Labels= featureSet_temp(:,size1+1);
 n = size(featureSet_1,2);
 m = size(featureSet_1,1);
 RES = zeros(m,n);
-
+RES_M=zeros(m,n);
+fs_remainingWords_1gm_trng_ma=ones(n,1)-fs_remainingWords_1gm_trng;
 for i = 1:m
     RES(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng';
+    RES_M(i,:) = featureSet_1(i,:) .* fs_remainingWords_1gm_trng_ma';
 end
 
-prob_test = RES*probability_words;
+prob_test_fm = RES*probability_words;
+prob_test_m = RES_M*probability_words;
 label_test=ones(m,1);
 for i=1:m
-    if prob_test(i,1)>=0.5
+    if prob_test_fm(i,1)>=prob_test_m(i,1)
         label_test(i,1)=2;
     end
 end
 countMatch=0;
 for j=1:m
-    if label_test(i,1) == Labels(i,1)
+    if label_test(j,1) == Labels(j,1)
         countMatch=countMatch+1;
     end
 end
