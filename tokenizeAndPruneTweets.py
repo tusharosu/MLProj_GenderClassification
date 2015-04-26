@@ -12,6 +12,7 @@ def pruneFile(filename):
 		curWordList=wordsList[0].split()
 		for i in range(0,len(curWordList)):
 			cmpWord =  curWordList[i].lower()
+
 			ignore = True
 			ignore = checkWholeWordToSkip(cmpWord)
 			if ignore == False:
@@ -26,11 +27,11 @@ def pruneFile(filename):
 		writeFile.write('\t'+ wordsList[1])
 	return filename+'_pruned.txt'
 
-def groupSameWords(outFileName):
+def groupSameWords(outFileName,filename):
 	readFile = open(outFileName, 'r')
 	# writeFile = open('Datasets\pruned_final.txt', 'w')
-	writeFile2 = open('Datasets\\final_pruned_tweets.txt', 'w')
-	writeFile3 = open('Datasets\wordMap.txt','w')
+	writeFile2 = open(filename+'_final_prune.txt', 'w')
+	
 	wordToCountMap_Final={}
 	count = 0
 	for line in readFile:
@@ -63,16 +64,16 @@ def groupSameWords(outFileName):
 				else:
 					wordToCountMap_Final[curWord][0] = 1
 
-		tempList = [[]]
+		# tempList = [[]]
 		tempList2=[[]]
-		tempList3=[[]]
+		
 		for key,value in wordToCountMap.iteritems():
-			tempList.append([key,int(value)])
+			# tempList.append([key,int(value)])
 			tempList2.append(str(key))
-		if tempList and tempList2:
-			tempList.pop(0)
+		if tempList2:
+			# tempList.pop(0)
 			tempList2.pop(0)
-			tempList.sort(key=lambda x: x[0], reverse=False)
+			# tempList.sort(key=lambda x: x[0], reverse=False)
 			tempList2.sort(key=lambda x: x[0], reverse=False)
 			# if len(tempList) !=0:
 			# 	for i in range(0,len(tempList)):
@@ -83,23 +84,27 @@ def groupSameWords(outFileName):
 			# 	# writeFile.write('\t'+ wordsList[1])
 			if len(tempList2) !=0:
 				for i in range(0,len(tempList2)):
-					if i==len(tempList)-1:
+					if i==len(tempList2)-1:
 						writeFile2.write(str(tempList2[i]))
 					else:
 						writeFile2.write(str(tempList2[i]) + ' ')
 				writeFile2.write('\t'+ wordsList[1])
+	if 'Trainingtweets' in filename:
+		writeFile3 = open('Datasets\\1gm_trng_tweets.txt','w')
+		tempList3=[[]]
+		for key,[value1,value2] in wordToCountMap_Final.iteritems():
+			tempList3.append([key,[int(value1),int(value2)]])
+	
+		if tempList3 and len(tempList3)!=0:
+				tempList3.pop(0)
+				tempList3.sort(key=lambda x: x[0], reverse=False)
+				for temp in tempList3:
+					key = temp[0]
+					femaleCount = temp[1][0]
+					maleCount = temp[1][1]
+					writeFile3.write(str(key) + '\t' + str(femaleCount) + '\t' + str(maleCount) + '\n')
 
-	for key,[value1,value2] in wordToCountMap_Final.iteritems():
-		tempList3.append([key,[int(value1),int(value2)]])
-
-	if tempList3 and len(tempList3) !=0:
-			tempList3.pop(0)
-			tempList3.sort(key=lambda x: x[0], reverse=False)
-			for temp in tempList3:
-				key = temp[0]
-				femaleCount = temp[1][0]
-				maleCount = temp[1][1]
-				writeFile3.write(str(key) + '\t' + str(femaleCount) + '\t' + str(maleCount) + '\n')
-
-outFileNameMale = pruneFile('Datasets\\tweets_without_RT')
-groupSameWords(outFileNameMale)
+to_be_pruned_List = ['Datasets\\Trainingtweets_without_RT','Datasets\\Testingtweets_without_RT']
+for filename in to_be_pruned_List:
+	outFileName = pruneFile(filename)
+	groupSameWords(outFileName,filename)
