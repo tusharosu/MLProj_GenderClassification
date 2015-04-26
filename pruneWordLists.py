@@ -10,7 +10,7 @@ skipSubstrList = ['http:','.com', 'www.', '.me', '.co', '.net', '.org', '.ca', '
 				  '.in']
 skipWordList = []
 
-stripCharacters = '\t\n\r\'\"?~<>.&_-!\\:,'
+stripCharacters = '\t\n\r\'\"?~<>.&_-!\\:,;|'
 stripSubstringList = ['\\t','\\n','\\r']
 
 def stripChars(word):
@@ -27,10 +27,10 @@ def stripChars(word):
 	return modWord
 
 def splitWord(word):
-	wordListAfterSplit = re.split(r'\.|\\n|,',word)
+	wordListAfterSplit = re.split(r'\.|\\n|!|(^.+)(#.*)|,',word)
 	retList = []
 	for item in wordListAfterSplit:
-		if len(item) > 0:
+		if item and len(item) > 0:
 			item = stripChars(item)
 			retList.append(item)
 	return retList

@@ -11,9 +11,17 @@ fCount = 0
 # def calcProb(key, mfWordCountDict):
 # 	return ((mfWordCountDict[key][0]) / (mfWordCountDict[key][0] + mfWordCountDict[key][1]))
 
-def calcProb(key, count):
-	return ((mfWordCountDict[key][0]) / count)
+def calcProb(mfWordCountDict, key, ind, count):
+	retVal =  ((mfWordCountDict[key][ind]) / count)
+	if retVal == float(0):
+		retVal = ((mfWordCountDict[key][ind]+0.1) / (count+0.1))
+	return retVal
 
+def writeListToFile(f, toWriteList):
+	for item in toWriteList:
+		for item2 in item:
+			f.write(str(item2) + '\t')
+		f.write('\n')
 
 def generateFreqBelowThresholdFS(mfWordCountDict, threshold):
 	keysToDeleteList = []
@@ -24,8 +32,9 @@ def generateFreqBelowThresholdFS(mfWordCountDict, threshold):
 	f = open('Datasets//fs_wordsBelowThreshold_'+ fileIdString +'.txt', 'w')
 	for key in mfWordCountDict:
 		if mfWordCountDict[key][0] < threshold and mfWordCountDict[key][1] < threshold:
-			prob = calcProb(key, mfWordCountDict)
-			toWriteList.append([key, prob, wordProbDict[key]])
+			probF = calcProb(mfWordCountDict, key, 0, fCount)
+			probM = calcProb(mfWordCountDict, key, 1, mCount)
+			toWriteList.append([key, probF, probM, wordProbDict[key]])
 			keysToDeleteList.append(key)
 			localTotalWordCount = localTotalWordCount + wordCountDict[key]
 
@@ -36,14 +45,13 @@ def generateFreqBelowThresholdFS(mfWordCountDict, threshold):
 	for item in toWriteList:
 		prob = wordCountDict[item[0]] / localTotalWordCount
 		check = check + prob;
-		intermToWriteList.append([item[0], item[1], str(prob)])
+		intermToWriteList.append([item[0], item[1], item[2], str(prob)])
 
 	print check
 	toWriteList = intermToWriteList
 
 	toWriteList.sort(key=lambda x: x[0], reverse=False)
-	for item in toWriteList:
-		f.write(item[0] + '\t' + str(item[1]) + '\t'+ str(item[2]) + '\n')
+	writeListToFile(f,toWriteList)
 
 	for key in keysToDeleteList:
 		mfWordCountDict.pop(key, None)
@@ -62,8 +70,9 @@ def generateObsceneJunkWordsFS(mfWordCountDict):
 	for key in mfWordCountDict:
 		for w in substrWordsList:
 			if w in key:
-				prob = calcProb(key, mfWordCountDict)
-				toWriteList.append([key, prob, wordProbDict[key]])
+				probF = calcProb(mfWordCountDict, key, 0, fCount)
+				probM = calcProb(mfWordCountDict, key, 1, mCount)
+				toWriteList.append([key, probF, probM, wordProbDict[key]])
 				keysToDeleteList.append(key)
 				localTotalWordCount = localTotalWordCount + wordCountDict[key]
 
@@ -73,15 +82,14 @@ def generateObsceneJunkWordsFS(mfWordCountDict):
 	check = long(0)
 	for item in toWriteList:
 		prob = wordCountDict[item[0]] / localTotalWordCount
-		intermToWriteList.append([item[0], item[1], str(prob)])
+		intermToWriteList.append([item[0], item[1],  item[2], str(prob)])
 		check = check + prob;
 
 	print check
 	toWriteList = intermToWriteList
 
 	toWriteList.sort(key=lambda x: x[0], reverse=False)
-	for item in toWriteList:
-		f.write(item[0] + '\t' + str(item[1]) + '\t'+ str(item[2]) + '\n')
+	writeListToFile(f,toWriteList)
 
 	for key in keysToDeleteList:
 		mfWordCountDict.pop(key, None)
@@ -98,8 +106,9 @@ def generateHashtagsFS(mfWordCountDict):
 	f = open('Datasets//fs_wordsWithHashtags_'+ fileIdString +'.txt', 'w')
 	for key in mfWordCountDict:
 		if key[0] == '#':
-			prob = calcProb(key, mfWordCountDict)
-			toWriteList.append([key, prob, wordProbDict[key]])
+			probF = calcProb(mfWordCountDict, key, 0, fCount)
+			probM = calcProb(mfWordCountDict, key, 1, mCount)
+			toWriteList.append([key, probF, probM, wordProbDict[key]])
 			keysToDeleteList.append(key)
 			localTotalWordCount = localTotalWordCount + wordCountDict[key]
 
@@ -109,15 +118,14 @@ def generateHashtagsFS(mfWordCountDict):
 	intermToWriteList = []
 	for item in toWriteList:
 		prob = wordCountDict[item[0]] / localTotalWordCount
-		intermToWriteList.append([item[0], item[1], str(prob)])
+		intermToWriteList.append([item[0], item[1],  item[2], str(prob)])
 		check = check + prob;
 
 	print check
 	toWriteList = intermToWriteList
 
 	toWriteList.sort(key=lambda x: x[0], reverse=False)
-	for item in toWriteList:
-		f.write(item[0] + '\t' + str(item[1]) + '\t'+ str(item[2]) + '\n')
+	writeListToFile(f,toWriteList)
 
 	for key in keysToDeleteList:
 		mfWordCountDict.pop(key, None)
@@ -131,8 +139,9 @@ def generateRemainingFS(mfWordCountDict):
 
 	f = open('Datasets//fs_remainingWords_'+ fileIdString +'.txt', 'w')
 	for key in mfWordCountDict:
-		prob = calcProb(key, mfWordCountDict)
-		toWriteList.append([key, prob, wordProbDict[key]])
+		probF = calcProb(mfWordCountDict, key, 0, fCount)
+		probM = calcProb(mfWordCountDict, key, 1, mCount)
+		toWriteList.append([key, probF, probM, wordProbDict[key]])
 		localTotalWordCount = localTotalWordCount + wordCountDict[key]
 		
 	# update just the current list words
@@ -141,7 +150,7 @@ def generateRemainingFS(mfWordCountDict):
 	intermToWriteList = []
 	for item in toWriteList:
 		prob = wordCountDict[item[0]] / localTotalWordCount
-		intermToWriteList.append([item[0], item[1], str(prob)])
+		intermToWriteList.append([item[0], item[1],  item[2], str(prob)])
 		check = check + prob;
 
 	print '\n' + str(check)
@@ -149,8 +158,7 @@ def generateRemainingFS(mfWordCountDict):
 	toWriteList = intermToWriteList
 
 	toWriteList.sort(key=lambda x: x[0], reverse=False)
-	for item in toWriteList:
-		f.write(item[0] + '\t' + str(item[1]) + '\t'+ str(item[2]) + '\n')
+	writeListToFile(f,toWriteList)
 
 def main():
 	global wordProbList
@@ -158,6 +166,8 @@ def main():
 	global wordCountDict
 	global mCount
 	global fCount
+	mCount = 758
+	fCount = 700
 	# A dictionary with word as the key
 	# and a list as value
 	# list has two coloumns : [female freq, male freq]
@@ -169,16 +179,23 @@ def main():
 	fileIdString = sys.argv[1]
 	femFileName = sys.argv[2]
 	maleFileName = sys.argv[3]
+	splitFeatureSet = True
 	threshold = 0
 	if len(sys.argv) > 4 and str(sys.argv[4]) != "":
 		threshold = int(sys.argv[4])
 	else:
 		threshold = 10
 
+	if len(sys.argv) > 5 and str(sys.argv[5]) != "":
+		string = (str(sys.argv[5])).lower()
+		if string == 'false' or string == 'f':
+ 			splitFeatureSet = False
+
 	print 'fileIdString : ' + fileIdString
 	print 'male freq file : ' + maleFileName
 	print 'female freq file : ' + femFileName
-	print ' threshold (default is 10) : ' + str(threshold)
+	print 'threshold (default is 10) : ' + str(threshold)
+	print 'split feature set :' + str(splitFeatureSet)
 	print 'Is this correct ? ',
 	ans = str(sys.stdin.read(1))
 	if ans != 'y' and ans != 'Y':
@@ -228,22 +245,24 @@ def main():
 	for item in wordProbList:
 		f.write(item[0] + '\t' + str(item[1]) + '\n')
 
-	print ''
-	print 'Writing words below threshold words feature set...',
-	mfWordCountDict = generateFreqBelowThresholdFS(mfWordCountDict, threshold)
-	print 'done'
-	print 'Number of remaining words in dict : ' + str(len(mfWordCountDict))
+	if splitFeatureSet:
+		print ''
+		print 'Writing words below threshold words feature set...',
+		mfWordCountDict = generateFreqBelowThresholdFS(mfWordCountDict, threshold)
+		print 'done'
+		print 'Number of remaining words in dict : ' + str(len(mfWordCountDict))
 
-	print ''
-	print 'Writing obscene/junk words feature set...',
-	mfWordCountDict = generateObsceneJunkWordsFS(mfWordCountDict)
-	print 'done'
-	print 'Number of remaining words in dict : ' + str(len(mfWordCountDict))
+		print ''
+		print 'Writing obscene/junk words feature set...',
+		mfWordCountDict = generateObsceneJunkWordsFS(mfWordCountDict)
+		print 'done'
+		print 'Number of remaining words in dict : ' + str(len(mfWordCountDict))
 
-	print ''
-	print 'Writing hashtags words feature set...',
-	mfWordCountDict = generateHashtagsFS(mfWordCountDict)
-	print 'done'
+		print ''
+		print 'Writing hashtags words feature set...',
+		mfWordCountDict = generateHashtagsFS(mfWordCountDict)
+		print 'done'
+	
 	print 'Number of remaining words in dict : ' + str(len(mfWordCountDict))
 	generateRemainingFS(mfWordCountDict)
 	print ''

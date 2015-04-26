@@ -59,7 +59,8 @@ def groupSameWords(outFileName,filename):
 			for item in wordsAfterSplitList:
 				tmpWrdLst1.append(item)
 
-			tmpWrdLst1 = list(set(tmpWrdLst1))
+			# Enable this to get distinct word counts
+			# tmpWrdLst1 = list(set(tmpWrdLst1))
 			for word in tmpWrdLst1:
 				if wordToCountMap.has_key(word):
 					wordToCountMap[word] += 1
