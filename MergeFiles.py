@@ -22,11 +22,12 @@ def CreateDataSet(featureFileList,filename2):
 			featureSet = line.split('\t')
 			word=featureSet[0]
 			prob=featureSet[1]
+			print prob
 			wordList.append(word)
 			wordMap[word] = c
 			c=c+1
 			probList.append(prob)
-			writeFile1.write(prob)
+			writeFile1.write(prob+'\n')
 	
 		for i in range(0,len(wordList)+1):
 			featureList.append(0)
