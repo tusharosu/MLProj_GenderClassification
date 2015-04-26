@@ -4,23 +4,46 @@ import sys
 
 wordProbDict = {}
 fileIdString = ""
+wordCountDict = {}
+mCount = 0
+fCount = 0
 
-def calcProb(key, mfWordCountDict):
-	return ((mfWordCountDict[key][0]) / (mfWordCountDict[key][0] + mfWordCountDict[key][1]))
+# def calcProb(key, mfWordCountDict):
+# 	return ((mfWordCountDict[key][0]) / (mfWordCountDict[key][0] + mfWordCountDict[key][1]))
+
+def calcProb(key, count):
+	return ((mfWordCountDict[key][0]) / count)
+
 
 def generateFreqBelowThresholdFS(mfWordCountDict, threshold):
 	keysToDeleteList = []
 	toWriteList = []
+	
+	localTotalWordCount = long(0)
+
 	f = open('Datasets//fs_wordsBelowThreshold_'+ fileIdString +'.txt', 'w')
 	for key in mfWordCountDict:
 		if mfWordCountDict[key][0] < threshold and mfWordCountDict[key][1] < threshold:
 			prob = calcProb(key, mfWordCountDict)
-			toWriteList.append([key, prob])
+			toWriteList.append([key, prob, wordProbDict[key]])
 			keysToDeleteList.append(key)
+			localTotalWordCount = localTotalWordCount + wordCountDict[key]
+
+	# update just the current list words
+	
+	check = long(0)
+	intermToWriteList = []
+	for item in toWriteList:
+		prob = wordCountDict[item[0]] / localTotalWordCount
+		check = check + prob;
+		intermToWriteList.append([item[0], item[1], str(prob)])
+
+	print check
+	toWriteList = intermToWriteList
 
 	toWriteList.sort(key=lambda x: x[0], reverse=False)
 	for item in toWriteList:
-		f.write(item[0] + '\t' + str(item[1]) + '\n')
+		f.write(item[0] + '\t' + str(item[1]) + '\t'+ str(item[2]) + '\n')
 
 	for key in keysToDeleteList:
 		mfWordCountDict.pop(key, None)
@@ -32,17 +55,33 @@ def generateObsceneJunkWordsFS(mfWordCountDict):
 	substrWordsList = ['nigga', 'fuck', 'sex']
 	keysToDeleteList = []
 	toWriteList = []
+	
+	localTotalWordCount = long(0)
+
 	f = open('Datasets//fs_obsceneJunkWords_'+ fileIdString +'.txt', 'w')
 	for key in mfWordCountDict:
 		for w in substrWordsList:
 			if w in key:
 				prob = calcProb(key, mfWordCountDict)
-				toWriteList.append([key, prob])
+				toWriteList.append([key, prob, wordProbDict[key]])
 				keysToDeleteList.append(key)
+				localTotalWordCount = localTotalWordCount + wordCountDict[key]
+
+	# update just the current list words
+	
+	intermToWriteList = []
+	check = long(0)
+	for item in toWriteList:
+		prob = wordCountDict[item[0]] / localTotalWordCount
+		intermToWriteList.append([item[0], item[1], str(prob)])
+		check = check + prob;
+
+	print check
+	toWriteList = intermToWriteList
 
 	toWriteList.sort(key=lambda x: x[0], reverse=False)
 	for item in toWriteList:
-		f.write(item[0] + '\t' + str(item[1]) + '\n')
+		f.write(item[0] + '\t' + str(item[1]) + '\t'+ str(item[2]) + '\n')
 
 	for key in keysToDeleteList:
 		mfWordCountDict.pop(key, None)
@@ -53,17 +92,32 @@ def generateObsceneJunkWordsFS(mfWordCountDict):
 def generateHashtagsFS(mfWordCountDict):
 	keysToDeleteList = []
 	toWriteList = []
+
+	localTotalWordCount = long(0)
+
 	f = open('Datasets//fs_wordsWithHashtags_'+ fileIdString +'.txt', 'w')
 	for key in mfWordCountDict:
 		if key[0] == '#':
 			prob = calcProb(key, mfWordCountDict)
-			toWriteList.append([key, prob])
+			toWriteList.append([key, prob, wordProbDict[key]])
 			keysToDeleteList.append(key)
+			localTotalWordCount = localTotalWordCount + wordCountDict[key]
 
+
+	# update just the current list words
+	check = long(0)
+	intermToWriteList = []
+	for item in toWriteList:
+		prob = wordCountDict[item[0]] / localTotalWordCount
+		intermToWriteList.append([item[0], item[1], str(prob)])
+		check = check + prob;
+
+	print check
+	toWriteList = intermToWriteList
 
 	toWriteList.sort(key=lambda x: x[0], reverse=False)
 	for item in toWriteList:
-		f.write(item[0] + '\t' + str(item[1]) + '\n')
+		f.write(item[0] + '\t' + str(item[1]) + '\t'+ str(item[2]) + '\n')
 
 	for key in keysToDeleteList:
 		mfWordCountDict.pop(key, None)
@@ -72,18 +126,38 @@ def generateHashtagsFS(mfWordCountDict):
 
 def generateRemainingFS(mfWordCountDict):
 	toWriteList = []
+
+	localTotalWordCount = long(0)
+
 	f = open('Datasets//fs_remainingWords_'+ fileIdString +'.txt', 'w')
 	for key in mfWordCountDict:
 		prob = calcProb(key, mfWordCountDict)
-		toWriteList.append([key, prob])
+		toWriteList.append([key, prob, wordProbDict[key]])
+		localTotalWordCount = localTotalWordCount + wordCountDict[key]
 		
+	# update just the current list words
+	
+	check = long(0)
+	intermToWriteList = []
+	for item in toWriteList:
+		prob = wordCountDict[item[0]] / localTotalWordCount
+		intermToWriteList.append([item[0], item[1], str(prob)])
+		check = check + prob;
+
+	print '\n' + str(check)
+	print '\n' + str(localTotalWordCount)
+	toWriteList = intermToWriteList
+
 	toWriteList.sort(key=lambda x: x[0], reverse=False)
 	for item in toWriteList:
-		f.write(item[0] + '\t' + str(item[1]) + '\n')
+		f.write(item[0] + '\t' + str(item[1]) + '\t'+ str(item[2]) + '\n')
 
 def main():
 	global wordProbList
 	global fileIdString
+	global wordCountDict
+	global mCount
+	global fCount
 	# A dictionary with word as the key
 	# and a list as value
 	# list has two coloumns : [female freq, male freq]

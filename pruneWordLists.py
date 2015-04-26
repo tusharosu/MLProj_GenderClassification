@@ -27,14 +27,12 @@ def stripChars(word):
 	return modWord
 
 def splitWord(word):
-	wordListAfterSplit = re.split('\.|\n',word)
-	retList = [""]
-	print '-------------------------' + word
+	wordListAfterSplit = re.split(r'\.|\\n|,',word)
+	retList = []
 	for item in wordListAfterSplit:
 		if len(item) > 0:
+			item = stripChars(item)
 			retList.append(item)
-	retList.pop(0)
-	print retList
 	return retList
 
 
@@ -83,39 +81,25 @@ def groupSameWords(outFileName):
 		curWord = wordsList[1]
 		curWord= unicode(curWord, "utf-8")
 		curWord = unidecode.unidecode(curWord)
-		for item in stripSubstringList:
-				if curWord.startswith(item):
-					curWord = words[len(item):]
-				if curWord.endswith(item):
-					curWord = words[:-len(item)]
 
-		curWord = curWord.strip(stripCharacters)
-		
-		if not '.' in curWord and not '\n' in curWord:
-				tmpWrdLst1.append(curWord)
+		curWord = stripChars(curWord)
+
+		if not curWord or len(curWord) == 1:
+			continue
+		curWord = curWord.lower()
+		wordsAfterSplitList = splitWord(curWord)
+		for item in wordsAfterSplitList:
+			tmpWrdLst1.append(item)
+
+		if not curWord or len(curWord) == 1:
+			if len(curWord) == 1:
+				writeTempFile.write(str(curWord) + '\n')
+			continue
+		curWord = curWord.lower()
+		if wordToCountMap.has_key(curWord):
+			wordToCountMap[curWord] += int(wordsList[0])
 		else:
-			dotWordList = curWord.split('.')
-			wordListMayHaveNL = [""]
-			for item in dotWordList:
-				if len(item) > 0:
-					nlWordList = item.split('\n')
-					for item2 in nlWordList:
-						if len(item2) >0:
-							print item2
-							item2 = stripChars(item2)
-							print item2
-							tmpWrdLst1.append(stripChars(item2))
-
-		for word in tmpWrdLst1:
-			if not word or len(word) == 1:
-				if len(word) == 1:
-					writeTempFile.write(str(word) + '\n')
-				continue
-			word = word.lower()
-			if wordToCountMap.has_key(word):
-				wordToCountMap[word] += int(wordsList[0])
-			else:
-				wordToCountMap[word] = int(wordsList[0])
+			wordToCountMap[curWord] = int(wordsList[0])
 
 	writeFile.truncate()
 	writeFile.close()

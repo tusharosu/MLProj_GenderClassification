@@ -1,6 +1,6 @@
 clc;
 clear all;
-%!C:\Python27\pythonw.exe MergeFiles.py fs_remainingWords_1gm_trng Testingtweets_without_RT_final_prune
+!C:\Python27\pythonw.exe MergeFiles.py fs_remainingWords_1gm_trng Trainingtweets_without_RT_final_prune
 fs_remainingWords_1gm_trng=importdata('fs_remainingWords_1gm_trng_probablility.txt');
 Testingtweets_pruned = importdata('Testingtweets_without_RT_final_prune.txt');
 probability_words = importdata('fs_remainingWords_1gm_trng.txt');
@@ -40,7 +40,7 @@ for i=1:m
 end
 countMatch=0;
 for j=1:m
-    if label_test(i,1) == Labels(i,1)
+    if label_test(j,1) == Labels(j,1)
         countMatch=countMatch+1;
     end
 end
