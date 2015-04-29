@@ -53,3 +53,26 @@ legend('Obscene junk words','Remaining words','Words below threshold','Words wit
 xlabel('Threshold');
 ylabel('Accuracy (%)');
 title('Accuracy % for Naïve Bayes on Test Data (Train:Test=4:1)')
+
+For SVM
+Threshold = [1 5 10 20];
+Accuracy1 = [60.91 60.72 59.94 59.77];
+Accuracy2 = [59.38 57.90 60.59 60.88];
+
+figure
+plot (Threshold,Accuracy1,Threshold,Accuracy2)
+legend('Remaining words','Words below threshold','Location','southeast');
+xlabel('Threshold');
+ylabel('Accuracy (%)');
+title('Accuracy % for SVM on Train Data (Train:Test=4:1)')
+
+Threshold = [1 5 10 20];
+Accuracy1 = [70.70 74.73 73.81 73.99];
+Accuracy2 = [66.30 61.54 67.03 65.38];
+
+figure
+plot (Threshold,Accuracy1,Threshold,Accuracy2)
+legend('Remaining words','Words below threshold','Location','southeast');
+xlabel('Threshold');
+ylabel('Accuracy (%)');
+title('Accuracy % for SVM on Test Data (Train:Test=4:1)')
